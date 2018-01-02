@@ -26,7 +26,7 @@ transmitter.on('glucose', glucose => {
 
   if(glucose.unfiltered > 500 || glucose.unfiltered < 30) // for safety, I'm assuming it is erroneous and ignoring
     {
-      console.log("Error - bad glucose data, not processing");
+      console.log("Error - sensor reported glucose > 500 or < 30, ignoring - not processing glucose of " + glucose.unfiltered);
       process.exit();
     }
     fs.writeFile("entry.json", data, function(err) {
