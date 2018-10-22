@@ -10,7 +10,9 @@ main()
   transmitter=$1
   if [ -z  "$transmitter" ]; then
     # check config file
-    transmitter=$(cat ${CONF_DIR}/xdripjs.json | jq -M -r '.transmitter_id')
+    if [ -e ${CONF_DIR}/xdripjs.json ]; then
+      transmitter=$(cat ${CONF_DIR}/xdripjs.json | jq -M -r '.transmitter_id')
+    fi
   fi
   if [ -z  "$transmitter" ] || [ "$transmitter" == "null" ]; then
     log "ERROR: No transmitter id set!; exiting"
@@ -962,8 +964,8 @@ function apply_lsr_calibration()
   else
     calibratedBG=0
     if [ "$mode" == "expired" ]; then
-      state_id=0x20
-      state="LSR Calibrated BG Out of Bounds" ; stateString=$state ; stateStringShort=$state
+      state="Needs Calibration" ; stateString=$state ; stateStringShort=$state
+      state_id=0x07
       post_cgm_ns_pill
       remove_dexcom_bt_pair
       log "expired mode with no calibration - exiting"
